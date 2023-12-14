@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <ctype.h>
 
 #define MAENGDE 7662
 #define WORD_LENGTH 200
@@ -168,55 +169,56 @@ void printCommandLines(void)
 
     printf("\nWrite \"Exit\" or \"0\" to exit the program\n");
     printf("Write \"Commands\" or \"1\" for the list of commands\n");
-    printf("Write \"RateMovieId\" or \"2\" followed by the Id for the movie you want to review\n");
-    printf("Write \"RandomMovie\"  or \"3\" This will give you 10 random movies\n");
-    printf("Write \"DeleteMyInfo\"  or \"4\" Delets all information we have on you\n");
-    printf("Write \"GetMovie\"  or \"5\" Followed by the movie Id to get all info on mthe movie\n");
-    printf("Write \"RecommendMovie\"  or \"6\" for movies we reccomend\n");
-    printf("Write \"PrintMovieHistory\"  or \"7\" Prints the movies you have watched with your review\n");
-
+    printf("Write \"RateMovieId\" or \"2\" to review a movie\n");
+    printf("Write \"RandomMovie\"  or \"3\" to get 10 random movies\n");
+    printf("Write \"DeleteMyInfo\"  or \"4\" to delete your data and start over\n");
+    printf("Write \"GetMovie\"  or \"5\" To get info about a Movie\n");
+    printf("Write \"RecommendMovie\"  or \"6\" to get movies recommended to you\n");
+    printf("Write \"PrintMovieHistory\"  or \"7\" Prints the movies you have watched, with your review\n");
+    printf("Write \"PrintOtherStats\" or \"8\" to see what info the recommender has generated\n");
 }
 
 int runCommand(char* command, Movies* movieArray, userStats* stats)
 {
-    if (strcmp(command, "Exit") == 0 || strcmp(command, "exit") == 0 || strcmp(command, "0") == 0)
+    command[0] = tolower(command[0]);
+    if (strcmp(command, "exit") == 0 || strcmp(command, "0") == 0)
     {
         return 0;
     }
-    else if (strcmp(command, "Commands") == 0 || strcmp(command, "commands") == 0 || strcmp(command, "1") == 0)
+    else if (strcmp(command, "commands") == 0 || strcmp(command, "1") == 0)
     {
         printCommandLines();
     }
-    else if (strcmp(command, "RateMovieId") == 0 || strcmp(command, "ratemovieid") == 0 || strcmp(command, "2") == 0)
+    else if (strcmp(command, "ratemovieid") == 0 || strcmp(command, "2") == 0)
     {
         int i;
         scanf(" %i", &i);
         rateMovie(i, stats, movieArray);
     }
-    else if (strcmp(command, "RandomMovie") == 0 || strcmp(command, "randommovie") == 0 || strcmp(command, "3") == 0)
+    else if (strcmp(command, "randommovie") == 0 || strcmp(command, "3") == 0)
     {
         recommendRandom(movieArray);
     }
-    else if (strcmp(command, "DeleteMyInfo") == 0 || strcmp(command, "deletemyinfo") == 0 || strcmp(command, "4") == 0)
+    else if (strcmp(command, "deletemyinfo") == 0 || strcmp(command, "4") == 0)
     {
         delete_all(stats);
         cold_start(movieArray, stats);
     }
-    else if (strcmp(command, "GetMovie") == 0 || strcmp(command, "getmovie") == 0 || strcmp(command, "5") == 0)
+    else if (strcmp(command, "getmovie") == 0 || strcmp(command, "5") == 0)
     {
         int i;
         scanf(" %i", &i);
         getMovie(movieArray, i);
     }
-    else if (strcmp(command, "RecommendMovie") == 0 || strcmp(command, "recommendmovie") == 0 || strcmp(command, "6") == 0)
+    else if (strcmp(command, "recommendmovie") == 0 || strcmp(command, "6") == 0)
     {
         RecommendMovie(movieArray, stats);
     }
-    else if (strcmp(command, "PrintMovieHistory") == 0 || strcmp(command, "printmoviehistory") == 0 || strcmp(command, "7") == 0)
+    else if (strcmp(command, "printmoviehistory") == 0 || strcmp(command, "7") == 0)
     {
         printMovieHistory(stats);
     }
-    else if (strcmp(command, "PrintOtherStats") == 0 || strcmp(command, "printotherstats") == 0 || strcmp(command, "8") == 0)
+    else if (strcmp(command, "printotherstats") == 0 || strcmp(command, "8") == 0)
     {
         printOtherStats(stats);
     }
@@ -386,7 +388,8 @@ void ask_user(Movies* movieArray, userStats* stats) {
     do {
         printf("Start with random recommendations? (Y/N): ");
         scanf(" %c", &x);
-
+        x = toupper(x);
+        
         if (x == 'Y') {
 
             char s;
@@ -396,6 +399,7 @@ void ask_user(Movies* movieArray, userStats* stats) {
                 printf("\n Do you want to review any of these movies? (Y/N): ");
 
                 scanf(" %c", &s);
+                s = toupper(s);
 
                 if (s == 'Y')
                 {
@@ -876,7 +880,7 @@ void rateMovie(int movieID, userStats* stats, Movies* movieArray) {
     }
 
     do {
-        printf("Please rate the movie from 1-10: ");
+        printf("Please rate the movie on a score from 1-10: ");
         scanf(" %d", &userRating);
         if (userRating < 1 || userRating > 10) {
             printf("INVALID INPUT");
