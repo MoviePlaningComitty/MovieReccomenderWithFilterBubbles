@@ -860,7 +860,7 @@ void directorRatedAlgorithm(directorStats directorArray[], Movies theMovie, int 
                 weight = ((movieRating - directorArray[r].directorPoint) / 10) ; //tallende her er v�gtberegning valgt af mo
                 directorArray[r].directorPoint *= weight; //efter weight beregning skal det ganges med scoren der var f�r
                 directorArray[r].directorPoint = (directorArray[r].directorPoint > 10)?10:directorArray[r].directorPoint;
-                 directorArray[r].directorPoint = (directorArray[r].directorPoint < 1)?1:directorArray[r].directorPoint;
+                directorArray[r].directorPoint = (directorArray[r].directorPoint < 1)?1:directorArray[r].directorPoint;
             }
             else if (movieRating < directorArray[r].directorPoint) //er det vi har gemt mere end mindre end det de taster
             {
