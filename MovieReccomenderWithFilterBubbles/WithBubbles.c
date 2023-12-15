@@ -695,6 +695,7 @@ int haveseen(Movies movieArray, userStats* stats)
 void RecommendMovie(Movies* movieArray, userStats* stats)
 {
     double genrevegt = 3, actorvegt = 2, directorvegt = 1;
+    int a;
     for (int i = 0; i < MAENGDE; i++)
     {
         if (haveseen(movieArray[i], stats))
@@ -756,12 +757,12 @@ void genreRatedAlgorithm(genreStats genreArray[], Movies theMovie, int movieRati
 {
     int pladsPaaArray = 0, compare = 0;
     double weight;
-
+    
     for (int i = 0; i < GENRE_MAX_AMOUNT; i++)
     {
-        while (genreArray[pladsPaaArray].genreId != 0)//m�ske �ndrer NULL
+        while (genreArray[pladsPaaArray].genreId != 0)//maaske aendrer NULL
         {
-            pladsPaaArray++; //denne whilel�kke finder den n�ste tomme plads p� array'et
+            pladsPaaArray++; //denne whileloekke finder den naeste tomme plads paa array'et
         }
 
         if (theMovie.genre[i][0] == '\n') {
@@ -770,70 +771,66 @@ void genreRatedAlgorithm(genreStats genreArray[], Movies theMovie, int movieRati
         for (int r = pladsPaaArray; r >= 0; r--)
         {
             compare = strcmp(theMovie.genre[i], genreArray[r].genreName);
-            if (compare == 0)//hvis den finder en plads paa array'et hvor den allerede eksistere skal den �ndrer point
+            if (compare == 0)//hvis den finder en plads paa array'et hvor den allerede eksistere skal den aendrer point
             {
                 if (movieRating > genreArray[r].genrePoint) //if statement er "har vi gemt en mindre score end det de har givet filmene?""
                 {
-                    weight = ((movieRating - genreArray[r].genrePoint) / 10) ; //tallende her er v�gtberegning valgt af mo
-                    genreArray[r].genrePoint *= weight; //efter weight beregning skal det ganges med scoren der var f�r
+                    weight = ((movieRating - genreArray[r].genrePoint) / 10) + 1; //tallende her er vaegtberegning valgt af mo
+                    genreArray[r].genrePoint *= weight; //efter weight beregning skal det ganges med scoren der var foer
                     genreArray[r].genrePoint = (genreArray[r].genrePoint > 10)?10:genreArray[r].genrePoint;
-                    genreArray[r].genrePoint = (genreArray[r].genrePoint < 1)?1:genreArray[r].genrePoint;
                 }
                 else if (movieRating < genreArray[r].genrePoint) //er det vi har gemt mere end mindre end det de taster
                 {
-                    weight = ((genreArray[r].genrePoint - movieRating) / 10) ; //den er nedvurderet med /20 i stedet for /10 s�dan at numrene ikke bliver �ndret for meget
+                    weight = ((genreArray[r].genrePoint - movieRating) / 10) + 1; //den er nedvurderet med /20 i stedet for /10 saedan at numrene ikke bliver aendret for meget
                     genreArray[r].genrePoint /= weight;
                     genreArray[r].genrePoint = (genreArray[r].genrePoint < 1)?1:genreArray[r].genrePoint;
-                    genreArray[r].genrePoint = (genreArray[r].genrePoint > 10)?10:genreArray[r].genrePoint;
                 }
                 break;
             }
         }
-        if (compare != 0) //hvis ikke den kan finde noget om genren i array, tilf�j disse v�rdier
+        if (compare != 0) //hvis ikke den kan finde noget om genren i array, tilfoej disse vaerdier
         {
             strcpy(genreArray[pladsPaaArray].genreName, theMovie.genre[i]);
             genreArray[pladsPaaArray].genreId = pladsPaaArray + 1;
             genreArray[pladsPaaArray].genrePoint = movieRating;
         }
     }
+    
 
-
-
+    
 }
 
 void actorRatedAlgorithm(actorStats actorArray[], Movies theMovie, int movieRating)
 {
     int pladsPaaArray = 0, compare = 0;
     double weight;
-    while (actorArray[pladsPaaArray].actorId != 0)//m�ske �ndrer NULL
+    while (actorArray[pladsPaaArray].actorId != 0)//maaske aendrer NULL
     {
-        pladsPaaArray++; //denne whilel�kke finder den n�ste tomme plads p� array'et
+        pladsPaaArray++; //denne whileloekke finder den naaste tomme plads paa array'et
     }
 
     for (int r = pladsPaaArray; r >= 0; r--)
     {
         compare = strcmp(theMovie.star_actor, actorArray[r].actorName);
-        if (compare == 0)//hvis den finder en plads paa array'et hvor den allerede eksistere skal den �ndrer point
+        if (compare == 0)//hvis den finder en plads paa array'et hvor den allerede eksistere skal den aandrer point
         {
             if (movieRating > actorArray[r].actorPoint) //if statement er "har vi gemt en mindre score end det de har givet filmene?""
             {
-                weight = ((movieRating - actorArray[r].actorPoint) / 10) ; //tallende her er v�gtberegning valgt af mo
-                actorArray[r].actorPoint *= weight; //efter weight beregning skal det ganges med scoren der var f�r
-                actorArray[r].actorPoint = (actorArray[r].actorPoint > 10)?10:actorArray[r].actorPoint;
-                actorArray[r].actorPoint = (actorArray[r].actorPoint > 10)?10:actorArray[r].actorPoint;
+                weight = ((movieRating - actorArray[r].actorPoint) / 10) + 1; //tallende her er vaegtberegning valgt af mo
+                actorArray[r].actorPoint *= weight; //efter weight beregning skal det ganges med scoren der var foer
+                actorArray[r].actorPoint = (actorArray[r].actorPoint > 10)? 10: actorArray[r].actorPoint;
             }
             else if (movieRating < actorArray[r].actorPoint) //er det vi har gemt mere end mindre end det de taster
             {
-                weight = ((actorArray[r].actorPoint - movieRating) / 10) ; //det samme bare nedvurdered fordi movierating er mindre end actorScore
+                weight = ((actorArray[r].actorPoint - movieRating) / 10) + 1; //det samme bare nedvurdered fordi movierating er mindre end actorScore
                 actorArray[r].actorPoint /= weight;
-                actorArray[r].actorPoint = (actorArray[r].actorPoint < 1)?1:actorArray[r].actorPoint;
-                actorArray[r].actorPoint = (actorArray[r].actorPoint > 10)?10:actorArray[r].actorPoint;
+                actorArray[r].actorPoint = (actorArray[r].actorPoint < 1)? 1: actorArray[r].actorPoint;
             }
             break;
         }
     }
 
-    if (compare != 0) //hvis ikke den kan finde noget om star_actorn i array, tilf�j disse v�rdier
+    if (compare != 0) //hvis ikke den kan finde noget om star_actorn i array, tilfoej disse vaerdier
     {
         strcpy(actorArray[pladsPaaArray].actorName, theMovie.star_actor);
         actorArray[pladsPaaArray].actorId = pladsPaaArray + 1;
@@ -845,35 +842,33 @@ void directorRatedAlgorithm(directorStats directorArray[], Movies theMovie, int 
 {
     int pladsPaaArray = 0, compare = 0;
     double weight;
-    while (directorArray[pladsPaaArray].directorId != 0)//m�ske �ndrer NULL
+    while (directorArray[pladsPaaArray].directorId != 0)//maaske aendrer NULL
     {
-        pladsPaaArray++; //denne whilel�kke finder den n�ste tomme plads p� array'et
+        pladsPaaArray++; //denne whileloekke finder den naaste tomme plads paa array'et
     }
 
     for (int r = pladsPaaArray; r >= 0; r--)
     {
         compare = strcmp(theMovie.director, directorArray[r].directorName);
-        if (compare == 0)//hvis den finder en plads paa array'et hvor den allerede eksistere skal den �ndrer point
+        if (compare == 0)//hvis den finder en plads paa array'et hvor den allerede eksistere skal den aendrer point
         {
             if (movieRating > directorArray[r].directorPoint) //if statement er "har vi gemt en mindre score end det de har givet filmene?""
             {
-                weight = ((movieRating - directorArray[r].directorPoint) / 10) ; //tallende her er v�gtberegning valgt af mo
-                directorArray[r].directorPoint *= weight; //efter weight beregning skal det ganges med scoren der var f�r
-                directorArray[r].directorPoint = (directorArray[r].directorPoint > 10)?10:directorArray[r].directorPoint;
-                directorArray[r].directorPoint = (directorArray[r].directorPoint < 1)?1:directorArray[r].directorPoint;
+                weight = ((movieRating - directorArray[r].directorPoint) / 10) + 1; //tallende her er vaegtberegning valgt af mo
+                directorArray[r].directorPoint *= weight; //efter weight beregning skal det ganges med scoren der var foer
+                directorArray[r].directorPoint = (directorArray[r].directorPoint > 10)? 10:directorArray[r].directorPoint;
             }
             else if (movieRating < directorArray[r].directorPoint) //er det vi har gemt mere end mindre end det de taster
             {
-                weight = ((directorArray[r].directorPoint - movieRating) / 10) ; //det samme bare nedvurdered fordi movierating er mindre end directorScore
+                weight = ((directorArray[r].directorPoint - movieRating) / 10) + 1; //det samme bare nedvurdered fordi movierating er mindre end directorScore
                 directorArray[r].directorPoint /= weight;
-                directorArray[r].directorPoint = (directorArray[r].directorPoint > 10)?10:directorArray[r].directorPoint;
-                directorArray[r].directorPoint = (directorArray[r].directorPoint < 1)?1:directorArray[r].directorPoint;
+                directorArray[r].directorPoint = (directorArray[r].directorPoint < 1)? 1:directorArray[r].directorPoint;
             }
             break;
         }
     }
 
-    if (compare != 0) //hvis ikke den kan finde noget om star_actorn i array, tilf�j disse v�rdier
+    if (compare != 0) //hvis ikke den kan finde noget om star_actorn i array, tilfoej disse vaerdier
     {
         strcpy(directorArray[pladsPaaArray].directorName, theMovie.director);
         directorArray[pladsPaaArray].directorId = pladsPaaArray + 1;
