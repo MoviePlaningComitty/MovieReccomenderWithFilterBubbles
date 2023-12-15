@@ -683,7 +683,7 @@ int haveseen(Movies movieArray, userStats* stats)
         if (stats[0].statsMovies[i].movieName[0] == '\n') {
             continue; // Skip empty strings
         }
-        if (strcmp(movieArray.nameOfFilm, stats[0].statsDirector[i].directorName) == 0)
+        if (strcmp(movieArray.nameOfFilm, stats[0].statsMovies[i].movieName) == 0)
         {
             x++;
             break;
