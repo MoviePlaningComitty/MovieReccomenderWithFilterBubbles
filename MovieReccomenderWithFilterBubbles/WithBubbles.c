@@ -1,4 +1,4 @@
-﻿#include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -180,7 +180,11 @@ void printCommandLines(void)
 
 int runCommand(char* command, Movies* movieArray, userStats* stats)
 {
-    command[0] = tolower(command[0]);
+    for (int i = 0; command[i] != '\0'; i++)
+        command[i] = tolower(command[i]);
+    
+    
+    
     if (strcmp(command, "exit") == 0 || strcmp(command, "0") == 0)
     {
         return 0;
@@ -389,7 +393,7 @@ void ask_user(Movies* movieArray, userStats* stats) {
         printf("Start with random recommendations? (Y/N): ");
         scanf(" %c", &x);
         x = toupper(x);
-        
+
         if (x == 'Y') {
 
             char s;
@@ -716,7 +720,7 @@ void RecommendMovie(Movies* movieArray, userStats* stats)
     printf("\nIt's likely that you will like these movies\n");
     for (int i = 0; i < 10; i++)
     {
-        printf("nr. %i; ", i);
+        printf("nr. %i; ", i +1);
         printMovieName(movieArray[i]);
     }
 }
@@ -757,7 +761,7 @@ void genreRatedAlgorithm(genreStats genreArray[], Movies theMovie, int movieRati
 {
     int pladsPaaArray = 0, compare = 0;
     double weight;
-    
+
     for (int i = 0; i < GENRE_MAX_AMOUNT; i++)
     {
         while (genreArray[pladsPaaArray].genreId != 0)//maaske aendrer NULL
@@ -777,15 +781,15 @@ void genreRatedAlgorithm(genreStats genreArray[], Movies theMovie, int movieRati
                 {
                     weight = ((movieRating - genreArray[r].genrePoint) / 10) + 1; //tallende her er vaegtberegning valgt af mo
                     genreArray[r].genrePoint *= weight; //efter weight beregning skal det ganges med scoren der var foer
-                    genreArray[r].genrePoint = (genreArray[r].genrePoint > 10)?10:genreArray[r].genrePoint;
-                    genreArray[r].genrePoint = (genreArray[r].genrePoint < 1)?1:genreArray[r].genrePoint;
+                    genreArray[r].genrePoint = (genreArray[r].genrePoint > 10) ? 10 : genreArray[r].genrePoint;
+                    genreArray[r].genrePoint = (genreArray[r].genrePoint < 1) ? 1 : genreArray[r].genrePoint;
                 }
                 else if (movieRating < genreArray[r].genrePoint) //er det vi har gemt mere end mindre end det de taster
                 {
                     weight = ((genreArray[r].genrePoint - movieRating) / 10) + 1; //den er nedvurderet med /20 i stedet for /10 saedan at numrene ikke bliver aendret for meget
                     genreArray[r].genrePoint /= weight;
-                    genreArray[r].genrePoint = (genreArray[r].genrePoint < 1)?1:genreArray[r].genrePoint;
-                    genreArray[r].genrePoint = (genreArray[r].genrePoint > 10)?10:genreArray[r].genrePoint;
+                    genreArray[r].genrePoint = (genreArray[r].genrePoint < 1) ? 1 : genreArray[r].genrePoint;
+                    genreArray[r].genrePoint = (genreArray[r].genrePoint > 10) ? 10 : genreArray[r].genrePoint;
                 }
                 break;
             }
@@ -797,9 +801,9 @@ void genreRatedAlgorithm(genreStats genreArray[], Movies theMovie, int movieRati
             genreArray[pladsPaaArray].genrePoint = movieRating;
         }
     }
-    
 
-    
+
+
 }
 
 void actorRatedAlgorithm(actorStats actorArray[], Movies theMovie, int movieRating)
@@ -820,15 +824,15 @@ void actorRatedAlgorithm(actorStats actorArray[], Movies theMovie, int movieRati
             {
                 weight = ((movieRating - actorArray[r].actorPoint) / 10) + 1; //tallende her er vaegtberegning valgt af mo
                 actorArray[r].actorPoint *= weight; //efter weight beregning skal det ganges med scoren der var foer
-                actorArray[r].actorPoint = (actorArray[r].actorPoint > 10)? 10: actorArray[r].actorPoint;
-                actorArray[r].actorPoint = (actorArray[r].actorPoint < 1)? 1: actorArray[r].actorPoint;
+                actorArray[r].actorPoint = (actorArray[r].actorPoint > 10) ? 10 : actorArray[r].actorPoint;
+                actorArray[r].actorPoint = (actorArray[r].actorPoint < 1) ? 1 : actorArray[r].actorPoint;
             }
             else if (movieRating < actorArray[r].actorPoint) //er det vi har gemt mere end mindre end det de taster
             {
                 weight = ((actorArray[r].actorPoint - movieRating) / 10) + 1; //det samme bare nedvurdered fordi movierating er mindre end actorScore
                 actorArray[r].actorPoint /= weight;
-                actorArray[r].actorPoint = (actorArray[r].actorPoint < 1)? 1: actorArray[r].actorPoint;
-                actorArray[r].actorPoint = (actorArray[r].actorPoint > 10)? 10: actorArray[r].actorPoint;
+                actorArray[r].actorPoint = (actorArray[r].actorPoint < 1) ? 1 : actorArray[r].actorPoint;
+                actorArray[r].actorPoint = (actorArray[r].actorPoint > 10) ? 10 : actorArray[r].actorPoint;
             }
             break;
         }
@@ -860,15 +864,15 @@ void directorRatedAlgorithm(directorStats directorArray[], Movies theMovie, int 
             {
                 weight = ((movieRating - directorArray[r].directorPoint) / 10) + 1; //tallende her er vaegtberegning valgt af mo
                 directorArray[r].directorPoint *= weight; //efter weight beregning skal det ganges med scoren der var foer
-                directorArray[r].directorPoint = (directorArray[r].directorPoint > 10)? 10:directorArray[r].directorPoint;
-                directorArray[r].directorPoint = (directorArray[r].directorPoint < 1)?1:directorArray[r].directorPoint;
+                directorArray[r].directorPoint = (directorArray[r].directorPoint > 10) ? 10 : directorArray[r].directorPoint;
+                directorArray[r].directorPoint = (directorArray[r].directorPoint < 1) ? 1 : directorArray[r].directorPoint;
             }
             else if (movieRating < directorArray[r].directorPoint) //er det vi har gemt mere end mindre end det de taster
             {
                 weight = ((directorArray[r].directorPoint - movieRating) / 10) + 1; //det samme bare nedvurdered fordi movierating er mindre end directorScore
                 directorArray[r].directorPoint /= weight;
-                directorArray[r].directorPoint = (directorArray[r].directorPoint > 10)? 10:directorArray[r].directorPoint;
-                directorArray[r].directorPoint = (directorArray[r].directorPoint < 1)? 1:directorArray[r].directorPoint;
+                directorArray[r].directorPoint = (directorArray[r].directorPoint > 10) ? 10 : directorArray[r].directorPoint;
+                directorArray[r].directorPoint = (directorArray[r].directorPoint < 1) ? 1 : directorArray[r].directorPoint;
             }
             break;
         }
@@ -946,4 +950,4 @@ int printOtherStats(userStats* stats) {
         printf("%s", stats[0].statsDirector[i].directorName);
     }
     return 0;
-}
+}   
